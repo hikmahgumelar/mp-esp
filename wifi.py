@@ -6,10 +6,12 @@ import ubinascii
 
 topic = b"esp"
         
-ap = 'MG'
+#ap = 'MG'
+#password = 'everyoneispartofmg'
+ap = 'Almebila'
+password = 'b1l@@lmes@1r@'
 wlan = network.WLAN(network.STA_IF)
 wlan.active(True)
-password = 'everyoneispartofmg'
 server = 'm16.cloudmqtt.com'
 wlan.connect(ap, password)
 state = 0
@@ -33,7 +35,7 @@ def berkelip():
 	time.sleep(0.5)
 	lampu.low()
 	time.sleep(0.5)
-
+        lampu.high()
 
 def main():
    client_id = b"esp8266"
@@ -41,7 +43,9 @@ def main():
    c.set_callback(sub_cb)
    c.connect()
    c.subscribe(topic)
-   c.publish(b"rec", "Terkoneksi")
+   c.publish(b"rec", str(wlan.ifconfig()))
+   c.publish(b"status", "TERHUBUNG")
+   c.publish(b"statusindi", "rgb(49,195,0)")
    try:
       while 1:
           c.wait_msg()
