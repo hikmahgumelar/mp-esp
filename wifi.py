@@ -18,12 +18,22 @@ def sub_cb(topic, msg):
     global state
     lampu = machine.Pin(2, machine.Pin.OUT)
     print((topic, msg))
+    if msg == b"blinking":
+       berkelip()
     if msg == b"on":
        lampu.value(0)
        state = 1
     elif msg == b"off":
        lampu.value(1)
        state = 0
+def berkelip():
+    lampu = machine.Pin(2, machine.Pin.OUT)
+    for i in range(10):
+	lampu.high()
+	time.sleep(0.5)
+	lampu.low()
+	time.sleep(0.5)
+
 
 def main():
    client_id = b"esp8266"
@@ -31,7 +41,7 @@ def main():
    c.set_callback(sub_cb)
    c.connect()
    c.subscribe(topic)
-
+   c.publish(b"rec", "Terkoneksi")
    try:
       while 1:
           c.wait_msg()
